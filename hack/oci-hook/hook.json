@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "hook": {
+    "path": "/usr/local/bin/hook",
+    "args": ["hook"]
+  },
+  "when": {
+    "annotations": {
+      "^io\\.containers\\.trace-syscall$": ".*"
+    }
+  },
+  "stages": ["prestart"]
+}
