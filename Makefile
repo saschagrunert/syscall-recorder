@@ -6,6 +6,7 @@ RUNTIME ?= podman
 BPFTOOL ?= bpftool
 CLANG ?= clang
 LLVM_STRIP ?= llvm-strip
+STRIP ?= strip
 
 # Build paths
 OUT := build
@@ -41,6 +42,7 @@ $(OUT):
 
 $(OUT)/$(BINARY): %: %.o | $(OUT)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
+	$(STRIP) -s $@
 
 $(patsubst %,$(OUT)/%.o,$(BINARY)): %.o: %.skel.h
 
