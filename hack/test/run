@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo $$
+
+while true; do
+    ls /
+    sleep 1
+done

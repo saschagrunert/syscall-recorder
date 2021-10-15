@@ -18,8 +18,8 @@ ARCH := $(shell uname -m | \
 	sed 's/aarch64/arm64/' | \
 	sed 's/ppc64le/powerpc/' | \
 	sed 's/mips.*/mips/')
-CFLAGS := -g -O2 -Wall
-LDFLAGS := -lelf -lz -lbpf -lseccomp
+CFLAGS ?= -g -O2 -Wall
+LDFLAGS ?= -lelf -lz -lbpf -lseccomp
 INCLUDES := -I$(OUT)
 
 .PHONY: all
@@ -33,9 +33,26 @@ clean:
 build-image:
 	$(RUNTIME) build -t $(BUILD_IMAGE) hack/build
 
+define run-in-container
+	$(RUNTIME) run -it -v $(shell pwd):/work -w /work $(BUILD_IMAGE) $(1)
+endef
+
 .PHONY: build-in-container
 build-in-container: build-image
-	$(RUNTIME) run -it -v $(shell pwd):/work -w /work $(BUILD_IMAGE) make
+	$(call run-in-container,make)
+
+.PHONY: build-in-container-static
+build-in-container-static: build-image
+	$(call run-in-container,make static)
+
+.PHONY: static
+static:
+	make all LDFLAGS='\
+		-static \
+		/usr/lib64/libbpf.a \
+		/usr/lib64/libz.a \
+		/usr/lib64/libseccomp.a \
+		/usr/lib64/libelf.a'
 
 $(OUT):
 	mkdir -p $@
