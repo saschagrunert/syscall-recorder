@@ -24,7 +24,6 @@ Vagrant.configure("2") do |config|
       cp /vagrant/build/syscallrecorder /usr/local/bin
 
       dnf install -y \
-        libbpf-static \
         go \
         podman
 

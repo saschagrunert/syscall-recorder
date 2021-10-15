@@ -82,5 +82,5 @@ hook:
 	cd hack/oci-hook && go build hook.go
 
 .PHONY: vagrant
-vagrant: build-in-container
+vagrant: build-in-container-static
 	vagrant up
